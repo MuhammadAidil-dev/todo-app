@@ -60,7 +60,7 @@ const SidebarMobile = ({ isOpen, setIsSidebarOpen }) => {
               My Task
             </NavLink>
             <NavLink
-              to="/tasks"
+              to="/tasks-categories"
               className={({ isActive }) =>
                 `w-full py-2 px-4 rounded-md flex items-center gap-2 text-xs lg:text-sm hover:bg-white hover:text-primary transition-all ${
                   isActive ? 'bg-white text-primary' : 'bg-primary text-white'
@@ -71,7 +71,7 @@ const SidebarMobile = ({ isOpen, setIsSidebarOpen }) => {
               Task Categories
             </NavLink>
             <NavLink
-              to="/tasks"
+              to="/settings"
               className={({ isActive }) =>
                 `w-full py-2 px-4 rounded-md flex items-center gap-2 text-xs lg:text-sm hover:bg-white hover:text-primary transition-all ${
                   isActive ? 'bg-white text-primary' : 'bg-primary text-white'
@@ -128,7 +128,7 @@ const SidebarDesktop = () => {
               My Task
             </NavLink>
             <NavLink
-              to="/tasks"
+              to="/tasks-categories"
               className={({ isActive }) =>
                 `w-full py-2 px-4 rounded-md flex items-center gap-2 text-xs lg:text-sm hover:bg-white hover:text-primary transition-all ${
                   isActive ? 'bg-white text-primary' : 'bg-primary text-white'
@@ -139,7 +139,7 @@ const SidebarDesktop = () => {
               Task Categories
             </NavLink>
             <NavLink
-              to="/tasks"
+              to="/settings"
               className={({ isActive }) =>
                 `w-full py-2 px-4 rounded-md flex items-center gap-2 text-xs lg:text-sm hover:bg-white hover:text-primary transition-all ${
                   isActive ? 'bg-white text-primary' : 'bg-primary text-white'

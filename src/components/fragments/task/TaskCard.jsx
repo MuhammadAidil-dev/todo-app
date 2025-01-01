@@ -2,7 +2,7 @@ import { FaRegCircle } from 'react-icons/fa6';
 
 const TaskCard = () => {
   return (
-    <div className=" border border-slate-500 p-3 rounded-md flex flex-col">
+    <div className=" border border-slate-500 p-3 rounded-md flex flex-col max-w-[400px]">
       <TaskCardBody />
       <TaskCardInformation />
     </div>
@@ -11,11 +11,11 @@ const TaskCard = () => {
 
 const TaskCardBody = () => {
   return (
-    <div className="flex flex-col gap-2 sm:flex-row">
+    <div className="flex flex-row gap-2">
       <span className="text-sm font-bold text-red-500">
         <FaRegCircle />
       </span>
-      <div className="flex flex-col sm:w-[80%]">
+      <div className="flex flex-col w-[80%]">
         <h4 className="text-lg line-clamp-2 font-semibold">
           Membuat aplikasi todo app dengan react dan express
         </h4>

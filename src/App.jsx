@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserLayout from './components/layouts/userDashboard/UserLayout';
 import DashboardPage from './components/pages/users/DashboardPage';
+import MyTaskPage from './components/pages/users/MyTaskPage';
 
 const App = () => {
   return (
@@ -9,6 +10,10 @@ const App = () => {
         <Route
           path="/"
           element={<UserLayout>{<DashboardPage />}</UserLayout>}
+        />
+        <Route
+          path="/tasks"
+          element={<UserLayout>{<MyTaskPage />}</UserLayout>}
         />
 
         {/* handle route not found */}
