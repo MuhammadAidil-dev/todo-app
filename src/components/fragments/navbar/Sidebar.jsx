@@ -3,7 +3,7 @@ import { FiUser } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import { MdDashboard } from 'react-icons/md';
 import { BiTask } from 'react-icons/bi';
-import { FaFilter, FaGear } from 'react-icons/fa6';
+import { FaGear } from 'react-icons/fa6';
 
 const SidebarMobile = ({ isOpen, setIsSidebarOpen }) => {
   useEffect(() => {
@@ -58,17 +58,6 @@ const SidebarMobile = ({ isOpen, setIsSidebarOpen }) => {
             >
               <BiTask />
               My Task
-            </NavLink>
-            <NavLink
-              to="/tasks-categories"
-              className={({ isActive }) =>
-                `w-full py-2 px-4 rounded-md flex items-center gap-2 text-xs lg:text-sm hover:bg-white hover:text-primary transition-all ${
-                  isActive ? 'bg-white text-primary' : 'bg-primary text-white'
-                }`
-              }
-            >
-              <FaFilter />
-              Task Categories
             </NavLink>
             <NavLink
               to="/settings"
@@ -126,17 +115,6 @@ const SidebarDesktop = () => {
             >
               <BiTask />
               My Task
-            </NavLink>
-            <NavLink
-              to="/tasks-categories"
-              className={({ isActive }) =>
-                `w-full py-2 px-4 rounded-md flex items-center gap-2 text-xs lg:text-sm hover:bg-white hover:text-primary transition-all ${
-                  isActive ? 'bg-white text-primary' : 'bg-primary text-white'
-                }`
-              }
-            >
-              <FaFilter />
-              Task Categories
             </NavLink>
             <NavLink
               to="/settings"
