@@ -1,6 +1,7 @@
 import { BiTask } from 'react-icons/bi';
 import TaskCard from '../../task/TaskCard';
 import { MdAddTask } from 'react-icons/md';
+import { useAppContext } from '../../../../hooks/hooks';
 
 const DashboardTaskContainer = ({ handleOpenTaskModal }) => {
   return (
@@ -29,11 +30,15 @@ const DashboardTaskContainer = ({ handleOpenTaskModal }) => {
 };
 
 const TaskList = () => {
+  const { todos } = useAppContext();
+
   return (
     <div className="flex flex-col mt-4 gap-4 max-h-screen overflow-y-auto items-center">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <TaskCard key={i} />
-      ))}
+      {todos.length > 0 ? (
+        todos.map((todo, index) => <TaskCard key={index} todo={todo} />)
+      ) : (
+        <p className="text-center">Tidak ada todo</p>
+      )}
     </div>
   );
 };
