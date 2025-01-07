@@ -1,11 +1,16 @@
 import { useState } from 'react';
+import { useAppContext } from '../../../hooks/hooks';
+import { createTodo, ToastNotification } from '../../../utils/utils';
 
-const TaskModal = ({ isOpen, onCloseModal }) => {
+const TaskModal = ({ isOpen, setTaskModal }) => {
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState('high');
+  const [selectedPriority, setSelectedPriority] = useState('low');
+  const taskStatus = 'not started';
+
+  const { fetchData } = useAppContext();
 
   const handleChangePriority = (e) => {
     setSelectedPriority(e.target.value);
@@ -19,8 +24,35 @@ const TaskModal = ({ isOpen, onCloseModal }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append('taskTitle', taskTitle);
+    formData.append('taskDescription', taskDescription);
+    formData.append('taskImage', selectedImage);
+    formData.append('taskPriority', selectedPriority);
+    formData.append('taskStatus', taskStatus);
+
+    try {
+      const { error, message } = await createTodo(formData);
+      if (error) {
+        throw new Error(message);
+      }
+      fetchData();
+      ToastNotification(message, 'success');
+      setTaskModal(false);
+      clearInput();
+    } catch (error) {
+      ToastNotification(error.message, 'error');
+    }
+  };
+
+  const clearInput = () => {
+    setTaskTitle('');
+    setTaskDescription('');
+    setSelectedImage(null);
+    setPreviewImage(null);
+    setSelectedPriority('low');
   };
 
   return (
@@ -35,7 +67,7 @@ const TaskModal = ({ isOpen, onCloseModal }) => {
             Add new task
           </h4>
           <button
-            onClick={onCloseModal}
+            onClick={() => setTaskModal(false)}
             className="cursor-pointer text-sm after:block after:content-[''] after:border-b after:border-black after:scale-x-[0.2] hover:after:scale-x-100 after:origin-right after:transition-transform"
           >
             Go back
@@ -66,7 +98,7 @@ const TaskModal = ({ isOpen, onCloseModal }) => {
                     type="radio"
                     name="priority"
                     value="high"
-                    checked={selectedPriority === 'high'}
+                    checked={selectedPriority === 'low'}
                     onChange={handleChangePriority}
                   />
                 </p>

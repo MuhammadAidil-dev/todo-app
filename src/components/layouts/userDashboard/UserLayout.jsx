@@ -1,3 +1,4 @@
+import { ToastContainer } from 'react-toastify';
 import Navbar from '../../fragments/navbar/Navbar';
 import { SidebarDesktop } from '../../fragments/navbar/Sidebar';
 
@@ -13,6 +14,8 @@ const UserLayout = ({ children }) => {
           </div>
         </div>
       </main>
+      {/* react-toastify */}
+      <ToastContainer />
     </>
   );
 };

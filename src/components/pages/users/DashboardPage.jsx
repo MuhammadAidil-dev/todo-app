@@ -26,7 +26,7 @@ const DashboardPage = () => {
         </div>
       </div>
       {/* modal add task */}
-      <TaskModal isOpen={isTaskModalOpen} onCloseModal={handleChangeModal} />
+      <TaskModal isOpen={isTaskModalOpen} setTaskModal={setIsTaskModalOpen} />
     </div>
   );
 };

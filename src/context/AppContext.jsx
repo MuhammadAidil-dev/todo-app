@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import CONFIG from '../config/config';
+import { fetchTodo } from '../utils/utils';
 
 export const AppContext = createContext();
 
@@ -7,25 +7,25 @@ const AppContextProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    fetchTodo();
+    fetchData();
   }, []);
 
-  // fetch todo
-  const fetchTodo = async () => {
+  const fetchData = async () => {
     try {
-      const response = await fetch(`${CONFIG.BASE_URL}/todos`);
-      if (!response.ok) {
-        throw new Error('Failed to get todo');
+      const { error, todos: todosData, message } = await fetchTodo();
+      if (error) {
+        throw new Error(message);
       }
-      const result = await response.json();
-      setTodos(result.data.todos);
+      setTodos(todosData);
     } catch (error) {
       console.log(error.message);
     }
   };
 
   return (
-    <AppContext.Provider value={{ todos }}>{children}</AppContext.Provider>
+    <AppContext.Provider value={{ todos, fetchData }}>
+      {children}
+    </AppContext.Provider>
   );
 };
 

@@ -2,8 +2,11 @@ import { BiTask } from 'react-icons/bi';
 import TaskCard from '../../task/TaskCard';
 import { MdAddTask } from 'react-icons/md';
 import { useAppContext } from '../../../../hooks/hooks';
+import { formatDateString } from '../../../../utils/utils';
 
 const DashboardTaskContainer = ({ handleOpenTaskModal }) => {
+  const date = new Date().toISOString();
+
   return (
     <div className="bg-background rounded-sm shadow-lg flex flex-col p-4">
       <div className="flex justify-between">
@@ -23,7 +26,7 @@ const DashboardTaskContainer = ({ handleOpenTaskModal }) => {
           Add task
         </button>
       </div>
-      <p className="mt-2 text-xs">31 December . Today</p>
+      <p className="mt-2 text-xs">{formatDateString(date)}</p>
       <TaskList />
     </div>
   );
