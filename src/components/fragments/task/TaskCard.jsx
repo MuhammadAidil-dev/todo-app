@@ -1,9 +1,10 @@
 import { FaRegCircle } from 'react-icons/fa6';
 import { formatDate } from '../../../utils/utils';
+import CONFIG from '../../../config/config';
 
 const TaskCard = ({ todo }) => {
   return (
-    <div className="flex-1 border border-slate-500 p-3 rounded-md flex flex-col sm:w-[350px]">
+    <div className="w-[300px] border border-slate-500 p-3 rounded-md flex flex-col sm:w-[350px]">
       <TaskCardBody todo={todo} />
       <TaskCardInformation todo={todo} />
     </div>
@@ -11,6 +12,10 @@ const TaskCard = ({ todo }) => {
 };
 
 const TaskCardBody = ({ todo }) => {
+  const imageURL = todo?.taskImage
+    ? `${CONFIG.BASE_URL}${todo.taskImage}`
+    : 'https://placehold.co/100?text=Task Image';
+
   return (
     <div className="flex flex-row gap-2">
       <span className="text-sm font-bold text-red-500">
@@ -26,8 +31,12 @@ const TaskCardBody = ({ todo }) => {
           </p>
         )}
       </div>
-      <div className="sm:shrink-0 w-[100px] mt-2 overflow-hidden rounded-md">
-        <img src="https://placehold.co/100?text=Task Image" alt="task image" />
+      <div className="sm:shrink-0 w-[100px] h-[100px] overflow-hidden mt-2 rounded-md">
+        <img
+          src={imageURL}
+          alt="task image"
+          className="w-full h-full object-cover"
+        />
       </div>
     </div>
   );
