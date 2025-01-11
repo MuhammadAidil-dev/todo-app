@@ -1,10 +1,28 @@
 import { FaRegCircle } from 'react-icons/fa6';
-import { formatDate } from '../../../utils/utils';
+import {
+  formatDate,
+  ToastNotification,
+  updateTodo,
+} from '../../../utils/utils';
 import CONFIG from '../../../config/config';
+import { BsThreeDots } from 'react-icons/bs';
+import { useState } from 'react';
+import { useAppContext } from '../../../hooks/hooks';
 
 const TaskCard = ({ todo }) => {
+  const [activedDropdown, setActivedDropdown] = useState(null);
+
+  const toggleDropdown = (id) => {
+    setActivedDropdown((prevDropdown) => (prevDropdown ? null : id));
+  };
+
   return (
     <div className="w-[300px] border border-slate-500 p-3 rounded-md flex flex-col sm:w-[350px]">
+      <TaskCardStatusButton
+        todo={todo}
+        isActive={activedDropdown}
+        toggleDropdown={() => toggleDropdown(todo._id)}
+      />
       <TaskCardBody todo={todo} />
       <TaskCardInformation todo={todo} />
     </div>
@@ -54,7 +72,7 @@ const TaskCardInformation = ({ todo }) => {
   const styleStatus =
     todo?.taskStatus === 'not started'
       ? 'text-red-500'
-      : todo?.taskStatus === 'in progres'
+      : todo?.taskStatus === 'in progress'
       ? 'text-blue-500'
       : 'text-green-500';
 
@@ -70,6 +88,65 @@ const TaskCardInformation = ({ todo }) => {
         Created on:{' '}
         <span className="text-slate-500">{formatDate(todo?.createdAt)}</span>
       </p>
+    </div>
+  );
+};
+
+const TaskCardStatusButton = ({ todo, isActive, toggleDropdown }) => {
+  const { fetchData } = useAppContext();
+  const handleUpdateStatus = async (status) => {
+    try {
+      const { error, message } = await updateTodo({
+        id: todo._id,
+        updateData: {
+          taskStatus: status,
+        },
+      });
+      if (error) {
+        throw new Error(message);
+      }
+      ToastNotification(message, 'success');
+      fetchData();
+    } catch (error) {
+      ToastNotification(error.message, 'error');
+    }
+  };
+
+  // list status
+  const ListStatus = () => {
+    const validStatus = ['completed', 'in progress', 'not started'];
+    const filteredStatus = validStatus.filter(
+      (data) => data != todo?.taskStatus
+    );
+
+    return (
+      <ul className="flex flex-col mt-1 gap-2">
+        {filteredStatus.map((status, index) => (
+          <li
+            key={index}
+            onClick={() => handleUpdateStatus(status)}
+            className="text-[10px] hover:text-green-500 cursor-pointer"
+          >
+            {status}
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
+  return (
+    <div className="relative flex justify-end border-b border-slate-300 mb-2 pb-1">
+      <BsThreeDots onClick={toggleDropdown} className="cursor-pointer" />
+      <div
+        className={`bg-white shadow-sm absolute top-full w-[150px] z-10 p-2 rounded-sm transform ${
+          isActive === todo?._id ? 'scale-y-100' : 'scale-y-0'
+        } transition-transform origin-top`}
+      >
+        <h4 className="text-xs text-primary font-semibold after:content-[''] after:border-b after:block">
+          Set status
+        </h4>
+        <ListStatus />
+      </div>
     </div>
   );
 };

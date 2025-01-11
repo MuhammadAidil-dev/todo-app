@@ -55,6 +55,31 @@ const createTodo = async (formData) => {
   }
 };
 
+// update task status
+const updateTodo = async ({ updateData, id }) => {
+  try {
+    const response = await fetch(`${CONFIG.BASE_URL}/todos/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateData),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to update task status');
+    }
+
+    const result = await response.json();
+    if (result.status === 'success') {
+      return { error: false, status: result.status, message: result.message };
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (error) {
+    return { error: true, status: 'error', message: error.message };
+  }
+};
+
 // toast notification
 const ToastNotification = (message, status) => {
   if (status === 'success') {
@@ -76,4 +101,5 @@ export {
   fetchTodo,
   ToastNotification,
   createTodo,
+  updateTodo,
 };

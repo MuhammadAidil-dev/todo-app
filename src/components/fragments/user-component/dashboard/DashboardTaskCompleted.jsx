@@ -1,5 +1,6 @@
 import { BiTask } from 'react-icons/bi';
 import TaskCard from '../../task/TaskCard';
+import { useAppContext } from '../../../../hooks/hooks';
 
 const DashboardTaskCompleted = () => {
   return (
@@ -16,11 +17,20 @@ const DashboardTaskCompleted = () => {
 };
 
 const ListTaskCompleted = () => {
+  const { todos } = useAppContext();
+  const filteredTodos = todos.filter((todo) => {
+    return todo.taskStatus === 'completed';
+  });
+
   return (
     <div className="mt-4 flex flex-col gap-4 max-h-[300px] overflow-y-auto">
-      {Array.from({ length: 3 }).map((_, i) => (
-        <TaskCard key={i} />
-      ))}
+      {filteredTodos.length > 0 ? (
+        filteredTodos?.map((todo, index) => (
+          <TaskCard key={index} todo={todo} />
+        ))
+      ) : (
+        <p className="text-sm text-center">Tidak ada task yang diselesaikan</p>
+      )}
     </div>
   );
 };

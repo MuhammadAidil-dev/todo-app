@@ -1,4 +1,5 @@
 import { BiTask } from 'react-icons/bi';
+import { useAppContext } from '../../../../hooks/hooks';
 
 const DashboardTaskProgres = () => {
   return (
@@ -15,10 +16,20 @@ const DashboardTaskProgres = () => {
 };
 
 const TaskProgresContainer = () => {
-  const total = 10;
-  const complete = (5 / total) * 100;
-  const inProgres = (2 / total) * 100;
-  const notStarted = (3 / total) * 100;
+  const { todos } = useAppContext();
+  const totalTodo = todos.length;
+  const totalCompleted = todos.filter(
+    (todo) => todo.taskStatus === 'completed'
+  ).length;
+  const totalInProgres = todos.filter(
+    (todo) => todo.taskStatus === 'in progress'
+  ).length;
+  const totalNotStarted = todos.filter(
+    (todo) => todo.taskStatus === 'not started'
+  ).length;
+  const complete = (totalCompleted / totalTodo) * 100;
+  const inProgres = (totalInProgres / totalTodo) * 100;
+  const notStarted = (totalNotStarted / totalTodo) * 100;
 
   return (
     <div className="flex items-center justify-center gap-2">
