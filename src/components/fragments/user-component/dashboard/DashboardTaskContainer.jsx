@@ -34,11 +34,11 @@ const DashboardTaskContainer = ({ handleOpenTaskModal }) => {
 
 const TaskList = () => {
   const { todos } = useAppContext();
-
+  const filteredTodos = todos.filter((todo) => todo.taskStatus != 'completed');
   return (
     <div className="flex flex-col mt-4 gap-4 max-h-screen overflow-y-auto items-center">
-      {todos.length > 0 ? (
-        todos.map((todo, index) => <TaskCard key={index} todo={todo} />)
+      {filteredTodos.length > 0 ? (
+        filteredTodos.map((todo, index) => <TaskCard key={index} todo={todo} />)
       ) : (
         <p className="text-center">Tidak ada todo</p>
       )}
