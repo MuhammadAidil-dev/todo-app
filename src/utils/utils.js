@@ -80,6 +80,22 @@ const updateTodo = async ({ updateData, id }) => {
   }
 };
 
+const deleteTodo = async (id) => {
+  try {
+    const response = await fetch(`${CONFIG.BASE_URL}/todos/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete todo');
+    }
+
+    const result = await response.json();
+    return { error: false, message: result.message };
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
 // toast notification
 const ToastNotification = (message, status) => {
   if (status === 'success') {
@@ -102,4 +118,5 @@ export {
   ToastNotification,
   createTodo,
   updateTodo,
+  deleteTodo,
 };
