@@ -10,18 +10,36 @@ import {
   ToastNotification,
 } from '../../../utils/utils';
 import ModalConfirm from '../../fragments/modal/ModalConfirm';
+import TaskModalEdit from '../../fragments/modal/TaskModalEdit';
 
 const MyTaskPage = () => {
   const [selectedTodo, setSelectedTodo] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSelectedTodo = (todo) => {
     setSelectedTodo(todo);
   };
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="py-8 flex flex-col w-full lg:flex-row lg:gap-4">
       <MyTaskList onSelectTodo={handleSelectedTodo} />
-      <DetailTaskContainer selectedTodo={selectedTodo} />
+      <DetailTaskContainer
+        selectedTodo={selectedTodo}
+        handleOpenModal={handleOpenModal}
+      />
+      {/* modal form edit */}
+      {isModalOpen && (
+        <TaskModalEdit
+          isOpen={isModalOpen}
+          setTaskModal={setIsModalOpen}
+          todo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
+      )}
     </div>
   );
 };
@@ -52,22 +70,22 @@ const MyTaskList = ({ onSelectTodo }) => {
   );
 };
 
-const DetailTaskContainer = ({ selectedTodo }) => {
+const DetailTaskContainer = ({ selectedTodo, handleOpenModal }) => {
   return (
     <div className="lg:w-full max-h-screen overflow-y-auto h-auto flex flex-col border border-slate-500 rounded-md shadow-lg p-4 mt-8 lg:mt-0">
-      <DetailTask todo={selectedTodo} />
+      <DetailTask todo={selectedTodo} handleOpenModal={handleOpenModal} />
       <ModalConfirm />
     </div>
   );
 };
 
-const DetailTask = ({ todo }) => {
+const DetailTask = ({ todo, handleOpenModal }) => {
   const stylePriority =
     todo?.taskPriority === 'low'
       ? 'text-green-500'
       : todo?.taskPriority === 'medium'
       ? 'text-orange-500'
-      : 'text-blue-500';
+      : 'text-red-500';
 
   const styleStatus =
     todo?.taskStatus === 'not started'
@@ -136,7 +154,10 @@ const DetailTask = ({ todo }) => {
         >
           <FaTrash />
         </button>
-        <button className="p-2 bg-primary text-white rounded-md cursor-pointer text-xs flex justify-center items-center transition-colors hover:bg-secondary">
+        <button
+          onClick={() => handleOpenModal()}
+          className="p-2 bg-primary text-white rounded-md cursor-pointer text-xs flex justify-center items-center transition-colors hover:bg-secondary"
+        >
           <RiEditBoxFill />
         </button>
       </div>

@@ -1,14 +1,20 @@
 import { useState } from 'react';
 import { useAppContext } from '../../../hooks/hooks';
-import { createTodo, ToastNotification } from '../../../utils/utils';
+import { ToastNotification, updateTodo } from '../../../utils/utils';
+import CONFIG from '../../../config/config';
 
-const TaskModal = ({ isOpen, setTaskModal }) => {
-  const [taskTitle, setTaskTitle] = useState('');
-  const [taskDescription, setTaskDescription] = useState('');
+const TaskModalEdit = ({ isOpen, setTaskModal, todo, setSelectedTodo }) => {
+  const [taskTitle, setTaskTitle] = useState(todo.taskTitle);
+  const [taskDescription, setTaskDescription] = useState(
+    todo.taskDescription || ''
+  );
   const [selectedImage, setSelectedImage] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState('low');
-  const taskStatus = 'not started';
+  const [previewImage, setPreviewImage] = useState(
+    todo.taskImage
+      ? CONFIG.BASE_URL + todo.taskImage
+      : 'https://placehold.co/100?text=Task Image'
+  );
+  const [selectedPriority, setSelectedPriority] = useState(todo.taskPriority);
 
   const { fetchData } = useAppContext();
 
@@ -29,18 +35,23 @@ const TaskModal = ({ isOpen, setTaskModal }) => {
     const formData = new FormData();
     formData.append('taskTitle', taskTitle);
     formData.append('taskDescription', taskDescription);
-    formData.append('taskImage', selectedImage);
+    if (selectedImage) {
+      formData.append('fileImage', selectedImage);
+    }
     formData.append('taskPriority', selectedPriority);
-    formData.append('taskStatus', taskStatus);
 
     try {
-      const { error, message } = await createTodo(formData);
+      const { error, message, todoUpdate } = await updateTodo({
+        id: todo._id,
+        updateData: formData,
+      });
       if (error) {
         throw new Error(message);
       }
       fetchData();
       ToastNotification(message, 'success');
       setTaskModal(false);
+      setSelectedTodo(todoUpdate);
       clearInput();
     } catch (error) {
       ToastNotification(error.message, 'error');
@@ -64,7 +75,7 @@ const TaskModal = ({ isOpen, setTaskModal }) => {
       <div className="flex flex-col bg-white w-[90%] p-4 rounded-md shadow-sm lg:w-[60%] mt-16">
         <span className="flex justify-between">
           <h4 className="font-semibold text-sm after:block after:content-[''] after:border-b-2 after:border-primary after:w-[50%]">
-            Add new task
+            EditTask
           </h4>
           <button
             onClick={() => setTaskModal(false)}
@@ -154,14 +165,7 @@ const TaskModal = ({ isOpen, setTaskModal }) => {
               </h4>
               <div className="flex items-center gap-4">
                 <div className="sm:shrink-0 w-[80px] mt-2 overflow-hidden rounded-md lg:w-[100px]">
-                  <img
-                    src={`${
-                      previewImage
-                        ? previewImage
-                        : 'https://placehold.co/100?text=Task Image'
-                    }`}
-                    alt="task image"
-                  />
+                  <img src={previewImage} alt="task image" />
                 </div>
                 <label
                   htmlFor="upload-image"
@@ -184,4 +188,4 @@ const TaskModal = ({ isOpen, setTaskModal }) => {
   );
 };
 
-export default TaskModal;
+export default TaskModalEdit;

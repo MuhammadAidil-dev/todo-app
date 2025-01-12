@@ -60,23 +60,30 @@ const updateTodo = async ({ updateData, id }) => {
   try {
     const response = await fetch(`${CONFIG.BASE_URL}/todos/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updateData),
+      body: updateData,
     });
     if (!response.ok) {
-      throw new Error('Failed to update task status');
+      throw new Error('Failed to update task');
     }
 
     const result = await response.json();
     if (result.status === 'success') {
-      return { error: false, status: result.status, message: result.message };
+      return {
+        error: false,
+        status: result.status,
+        message: result.message,
+        todoUpdate: result.data.todo,
+      };
     } else {
       throw new Error(result.message);
     }
   } catch (error) {
-    return { error: true, status: 'error', message: error.message };
+    return {
+      error: true,
+      status: 'error',
+      message: error.message,
+      todoUpdate: null,
+    };
   }
 };
 

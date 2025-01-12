@@ -67,7 +67,7 @@ const TaskCardInformation = ({ todo }) => {
       ? 'text-green-500'
       : todo?.taskPriority === 'medium'
       ? 'text-orange-500'
-      : 'text-blue-500';
+      : 'text-red-500';
 
   const styleStatus =
     todo?.taskStatus === 'not started'
@@ -95,12 +95,12 @@ const TaskCardInformation = ({ todo }) => {
 const TaskCardStatusButton = ({ todo, isActive, toggleDropdown }) => {
   const { fetchData } = useAppContext();
   const handleUpdateStatus = async (status) => {
+    const formData = new FormData();
+    formData.append('taskStatus', status);
     try {
       const { error, message } = await updateTodo({
         id: todo._id,
-        updateData: {
-          taskStatus: status,
-        },
+        updateData: formData,
       });
       if (error) {
         throw new Error(message);
