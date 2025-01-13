@@ -1,5 +1,6 @@
 import { BiTask } from 'react-icons/bi';
 import { useAppContext } from '../../../../hooks/hooks';
+import { useEffect, useState } from 'react';
 
 const DashboardTaskProgres = () => {
   return (
@@ -17,7 +18,7 @@ const DashboardTaskProgres = () => {
 
 const TaskProgresContainer = () => {
   const { todos } = useAppContext();
-  const totalTodo = todos.length;
+  const [totalTodo, setTotalTodo] = useState(0);
   const totalCompleted = todos.filter(
     (todo) => todo.taskStatus === 'completed'
   ).length;
@@ -27,13 +28,15 @@ const TaskProgresContainer = () => {
   const totalNotStarted = todos.filter(
     (todo) => todo.taskStatus === 'not started'
   ).length;
-  const complete =
-    totalTodo.length > 0 ? (totalCompleted / totalTodo) * 100 : 0;
-  const inProgres =
-    totalTodo.length > 0 ? (totalInProgres / totalTodo) * 100 : 0;
-  const notStarted =
-    totalTodo.length > 0 ? (totalNotStarted / totalTodo) * 100 : 0;
+  const complete = totalTodo > 0 ? (totalCompleted / totalTodo) * 100 : 0;
+  const inProgres = totalTodo > 0 ? (totalInProgres / totalTodo) * 100 : 0;
+  const notStarted = totalTodo > 0 ? (totalNotStarted / totalTodo) * 100 : 0;
 
+  useEffect(() => {
+    setTotalTodo(todos.length);
+  }, [todos]);
+
+  console.log('complete', totalCompleted);
   return (
     <div className="flex items-center justify-center gap-2">
       <div className="flex flex-col gap-2 items-center">
