@@ -36,7 +36,6 @@ const TaskProgresContainer = () => {
     setTotalTodo(todos.length);
   }, [todos]);
 
-  console.log('complete', totalCompleted);
   return (
     <div className="flex items-center justify-center gap-2">
       <div className="flex flex-col gap-2 items-center">
