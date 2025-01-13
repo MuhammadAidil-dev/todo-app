@@ -27,9 +27,12 @@ const TaskProgresContainer = () => {
   const totalNotStarted = todos.filter(
     (todo) => todo.taskStatus === 'not started'
   ).length;
-  const complete = (totalCompleted / totalTodo) * 100;
-  const inProgres = (totalInProgres / totalTodo) * 100;
-  const notStarted = (totalNotStarted / totalTodo) * 100;
+  const complete =
+    totalTodo.length > 0 ? (totalCompleted / totalTodo) * 100 : 0;
+  const inProgres =
+    totalTodo.length > 0 ? (totalInProgres / totalTodo) * 100 : 0;
+  const notStarted =
+    totalTodo.length > 0 ? (totalNotStarted / totalTodo) * 100 : 0;
 
   return (
     <div className="flex items-center justify-center gap-2">
