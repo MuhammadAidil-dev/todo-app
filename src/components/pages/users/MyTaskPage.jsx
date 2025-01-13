@@ -29,6 +29,7 @@ const MyTaskPage = () => {
       <MyTaskList onSelectTodo={handleSelectedTodo} />
       <DetailTaskContainer
         selectedTodo={selectedTodo}
+        setSelectedTodo={setSelectedTodo}
         handleOpenModal={handleOpenModal}
       />
       {/* modal form edit */}
@@ -70,16 +71,26 @@ const MyTaskList = ({ onSelectTodo }) => {
   );
 };
 
-const DetailTaskContainer = ({ selectedTodo, handleOpenModal }) => {
+const DetailTaskContainer = ({
+  selectedTodo,
+  handleOpenModal,
+  setSelectedTodo,
+}) => {
   return (
     <div className="lg:w-full max-h-screen overflow-y-auto h-auto flex flex-col border border-slate-500 rounded-md shadow-lg p-4 mt-8 lg:mt-0">
-      <DetailTask todo={selectedTodo} handleOpenModal={handleOpenModal} />
-      <ModalConfirm />
+      <DetailTask
+        todo={selectedTodo}
+        handleOpenModal={handleOpenModal}
+        setSelectedTodo={setSelectedTodo}
+      />
     </div>
   );
 };
 
-const DetailTask = ({ todo, handleOpenModal }) => {
+const DetailTask = ({ todo, handleOpenModal, setSelectedTodo }) => {
+  const { fetchData } = useAppContext();
+  const [isOpen, setIsOpen] = useState(false);
+
   const stylePriority =
     todo?.taskPriority === 'low'
       ? 'text-green-500'
@@ -101,6 +112,8 @@ const DetailTask = ({ todo, handleOpenModal }) => {
         throw new Error(message);
       }
       ToastNotification(message, 'success');
+      fetchData();
+      setSelectedTodo(null);
     } catch (error) {
       ToastNotification(error.message, 'error');
     }
@@ -149,7 +162,7 @@ const DetailTask = ({ todo, handleOpenModal }) => {
       </div>
       <div className="flex justify-end gap-2 mt-4 lg:mt-auto">
         <button
-          onClick={() => handleDeleteTodo(todo._id)}
+          onClick={() => setIsOpen(true)}
           className="p-2 bg-primary text-white rounded-md cursor-pointer text-xs flex justify-center items-center transition-colors hover:bg-secondary"
         >
           <FaTrash />
@@ -161,6 +174,13 @@ const DetailTask = ({ todo, handleOpenModal }) => {
           <RiEditBoxFill />
         </button>
       </div>
+
+      {/* modal confirm delete task */}
+      <ModalConfirm
+        isOpen={isOpen}
+        onCancel={() => setIsOpen(false)}
+        onConfirm={() => handleDeleteTodo(todo._id)}
+      />
     </>
   );
 };
