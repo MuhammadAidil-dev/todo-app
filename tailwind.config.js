@@ -11,6 +11,9 @@ export default {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
       },
+      backgroundImage: {
+        texture: "url('/assets/images/bg-image-login-page.png')",
+      },
     },
   },
   plugins: [],
